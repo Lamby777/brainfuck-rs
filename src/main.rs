@@ -45,7 +45,7 @@ fn main() {
 			// Print Cell -> ASCII Char
 			'.' => {
 				let asciiv: u8 = memory[ptr_i.0].0;
-				print!("{} ", asciiv);
+				print!(" {} ({})", asciiv, asciiv as char);
 			},
 
 			// Read ASCII Char -> Cell
