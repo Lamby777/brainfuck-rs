@@ -35,36 +35,36 @@ fn main() {
 	while step < program.len() {
 		let mut next_step: usize = step + 1;
 
-		match program[step] as char {
+		match program[step] {
 			// Move pointer
-			'>' => {
+			b'>' => {
 				if ptr_i < MEM_CELLS { ptr_i += 1; }
 				else { panic!("Attempt to overflow pointer location!"); }
 			},
-			'<' => {
+			b'<' => {
 				if ptr_i > 0 { ptr_i -= 1; }
 				else { panic!("Attempt to underflow pointer location!"); }
 			},
 
 			// Modify cell
-			'+' => memory[ptr_i] += 1,
-			'-' => memory[ptr_i] -= 1,
+			b'+' => memory[ptr_i] += 1,
+			b'-' => memory[ptr_i] -= 1,
 
 			// Print Cell -> ASCII Char
-			'.' => {
+			b'.' => {
 				let asciiv: u8 = memory[ptr_i].0;
 				print!("{}", asciiv as char);
 			},
 
 			// Read ASCII Char -> Cell
-			',' => {
+			b',' => {
 				memory[ptr_i] = Wrapping(getch());
 			},
 
 
 			// thank you so much http://brainfuck.org/brainfuck.html
 			// for helping my brain not explode while coding this part
-			'[' => {
+			b'[' => {
 				// If ptr == 0 skip past ]
 				if (memory[ptr_i]).0 == 0 {
 					// Rest of program, after the current step
@@ -75,7 +75,7 @@ fn main() {
 				}
 			},
 
-			']' => {
+			b']' => {
 				// If ptr != 0 skip back to [
 				if (memory[ptr_i]).0 != 0 {
 					next_step = *loop_stack.last().unwrap() + 1;
@@ -104,8 +104,8 @@ fn get_next_closing_bracket(slice: &str) -> usize {
 
 	for i in 0..chars.len() {
 		match chars[i] {
-			'['	=> (ct += 1),
-			']'	=> (ct -= 1),
+			'['	=> { ct += 1 },
+			']'	=> { ct -= 1 },
 			_	=> ()
 		};
 
