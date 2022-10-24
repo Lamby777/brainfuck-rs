@@ -5,7 +5,10 @@
 
 use std::env;
 use std::num::Wrapping;
+use bimap::*;
 use text_io::read;
+
+type LoopBounds = BiHashMap<usize, usize>;
 
 const MEM_CELLS: usize = 30_000;
 
@@ -21,6 +24,8 @@ fn main() {
 									} else {				HELLO_WORLD_PROGRAM };
 	
 	let program: Vec<u8>			= programstr.as_bytes().to_vec();
+
+	let loops_precomp: LoopBounds = calc_loops(&programstr);
 
 	let mut loop_stack: Vec<usize>	= vec![];
 
@@ -115,4 +120,19 @@ fn get_next_closing_bracket(slice: &str) -> usize {
 	};
 
 	panic!("Loop Syntax Error");
+}
+
+fn calc_loops(tape: &str) -> LoopBounds {
+	let mut res: LoopBounds = BiMap::<usize, usize>::new();
+
+	// Find every [ and its matching ]
+	for i in tape.match_indices("[") {
+		let l_start = i.0;
+		let rest: &str = &tape[l_start+1..];
+		let l_end = get_next_closing_bracket(rest);
+
+		res.insert(l_start, l_end);
+	}
+
+	res
 }
