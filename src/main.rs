@@ -73,8 +73,7 @@ fn main() {
 				// If ptr == 0 skip past ]
 				if (memory[ptr_i]).0 == 0 {
 					// Rest of program, after the current step
-					let rest: &str = &programstr[step+1..];
-					next_step = step + get_next_closing_bracket(rest);
+					next_step = *loops_precomp.get_by_left(&step).unwrap();
 				} else {
 					loop_stack.push(step);
 				}
