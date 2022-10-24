@@ -5,12 +5,14 @@
 
 use std::env;
 use std::num::Wrapping;
+use text_io::read;
 
 const MEM_CELLS: usize = 30_000;
 
 // Used if args left empty
 const HELLO_WORLD_PROGRAM: &str =
 "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.";
+//",>,[<+>-]<."; // Add inputs
 
 fn main() {
 	// Get arguments
@@ -59,11 +61,14 @@ fn main() {
 			// Print Cell -> ASCII Char
 			'.' => {
 				let asciiv: u8 = memory[ptr_i].0;
-				print!(" {} ({})", asciiv, asciiv as char);
+				print!(" {} ({})", asciiv, asciiv as char);	// Debug Print
+				//print!("{}", asciiv as char);				// Regular Print
 			},
 
 			// Read ASCII Char -> Cell
-			',' => (),
+			',' => {
+				memory[ptr_i] = Wrapping(getch());
+			},
 
 
 
@@ -84,12 +89,11 @@ fn main() {
 
 			']' => {
 				// If ptr != 0 skip back to [
-				if ptr_i != 0 {
+				if (memory[ptr_i]).0 != 0 {
 					next_step = *loop_stack.last().unwrap() + 1;
 				} else {
 					loop_stack.pop();
 				}
-				//dbg!(ptr_i.0, step, next_step);
 			},
 
 			
@@ -99,6 +103,11 @@ fn main() {
 
 		step = next_step
 	}
+}
+
+fn getch() -> u8 {
+	let input: char = read!();
+	input as u8
 }
 
 fn get_next_closing_bracket(slice: &str) -> usize {
