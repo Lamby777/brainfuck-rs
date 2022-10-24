@@ -35,23 +35,15 @@ fn main() {
 	while step < program.len() {
 		let mut next_step: usize = step + 1;
 
-		print!("\n{}\t| {}", step, program[step]);
-
 		match program[step] {
 			// Move pointer
 			'>' => {
-				if ptr_i < MEM_CELLS {
-					ptr_i += 1
-				} else {
-					panic!("Attempt to overflow pointer location!");
-				}
+				if ptr_i < MEM_CELLS { ptr_i += 1; }
+				else { panic!("Attempt to overflow pointer location!"); }
 			},
 			'<' => {
-				if ptr_i > 0 {
-					ptr_i -= 1
-				} else {
-					panic!("Attempt to underflow pointer location!");
-				}
+				if ptr_i > 0 { ptr_i -= 1; }
+				else { panic!("Attempt to underflow pointer location!"); }
 			},
 
 			// Modify cell
@@ -61,17 +53,13 @@ fn main() {
 			// Print Cell -> ASCII Char
 			'.' => {
 				let asciiv: u8 = memory[ptr_i].0;
-				print!(" {} ({})", asciiv, asciiv as char);	// Debug Print
-				//print!("{}", asciiv as char);				// Regular Print
+				print!("{}", asciiv as char);
 			},
 
 			// Read ASCII Char -> Cell
 			',' => {
 				memory[ptr_i] = Wrapping(getch());
 			},
-
-
-
 
 
 			// thank you so much http://brainfuck.org/brainfuck.html
@@ -97,11 +85,10 @@ fn main() {
 			},
 
 			
-			
 			_ => ()
 		}
 
-		step = next_step
+		step = next_step;
 	}
 }
 
