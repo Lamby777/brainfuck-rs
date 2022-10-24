@@ -6,6 +6,8 @@
 use std::env;
 use std::num::Wrapping;
 
+const MEM_CELLS: usize = 30_000;
+
 // Used if args left empty
 const HELLO_WORLD_PROGRAM: &str =
 "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.";
@@ -22,10 +24,10 @@ fn main() {
 
 
 	// Index of pointer
-	let mut ptr_i:	Wrapping<usize>	= Wrapping(0usize);
+	let mut ptr_i:	usize			= 0;
 	let mut step:	usize			= 0;
 
-	let mut memory: Vec<Wrapping<u8>> = vec![Wrapping(0); 256];
+	let mut memory: Vec<Wrapping<u8>> = vec![Wrapping(0); MEM_CELLS];
 
 	
 	while step < program.len() {
@@ -35,16 +37,28 @@ fn main() {
 
 		match program[step] {
 			// Move pointer
-			'>' => ptr_i += 1,
-			'<' => ptr_i -= 1,
+			'>' => {
+				if ptr_i < MEM_CELLS {
+					ptr_i += 1
+				} else {
+					panic!("Attempt to overflow pointer location!");
+				}
+			},
+			'<' => {
+				if ptr_i > 0 {
+					ptr_i -= 1
+				} else {
+					panic!("Attempt to underflow pointer location!");
+				}
+			},
 
 			// Modify cell
-			'+' => memory[ptr_i.0] += 1,
-			'-' => memory[ptr_i.0] -= 1,
+			'+' => memory[ptr_i] += 1,
+			'-' => memory[ptr_i] -= 1,
 
 			// Print Cell -> ASCII Char
 			'.' => {
-				let asciiv: u8 = memory[ptr_i.0].0;
+				let asciiv: u8 = memory[ptr_i].0;
 				print!(" {} ({})", asciiv, asciiv as char);
 			},
 
@@ -59,7 +73,7 @@ fn main() {
 			// for helping my brain not explode while coding this part
 			'[' => {
 				// If ptr == 0 skip past ]
-				if (memory[ptr_i.0]).0 == 0 {
+				if (memory[ptr_i]).0 == 0 {
 					// Rest of program, after the current step
 					let rest: &str = &programstr[step+1..];
 					next_step = step + get_next_closing_bracket(rest);
@@ -70,7 +84,7 @@ fn main() {
 
 			']' => {
 				// If ptr != 0 skip back to [
-				if ptr_i.0 != 0 {
+				if ptr_i != 0 {
 					next_step = *loop_stack.last().unwrap() + 1;
 				} else {
 					loop_stack.pop();
