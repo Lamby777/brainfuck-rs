@@ -20,7 +20,7 @@ fn main() {
 	let programstr: &str			= if args.len() > 1 {	&(args[1])[..]
 									} else {				HELLO_WORLD_PROGRAM };
 	
-	let program: Vec<char>			= programstr.chars().collect();
+	let program: Vec<u8>			= programstr.as_bytes().to_vec();
 
 	let mut loop_stack: Vec<usize>	= vec![];
 
@@ -35,7 +35,7 @@ fn main() {
 	while step < program.len() {
 		let mut next_step: usize = step + 1;
 
-		match program[step] {
+		match program[step] as char {
 			// Move pointer
 			'>' => {
 				if ptr_i < MEM_CELLS { ptr_i += 1; }
