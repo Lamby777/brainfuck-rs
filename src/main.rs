@@ -15,7 +15,6 @@ const MEM_CELLS: usize = 30_000;
 // Used if args left empty
 const HELLO_WORLD_PROGRAM: &str =
 "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.";
-//",>,[<+>-]<."; // Add inputs
 
 fn main() {
 	// Get arguments
@@ -125,7 +124,7 @@ fn calc_loops(tape: &str) -> LoopBounds {
 	let mut res: LoopBounds = BiMap::<usize, usize>::new();
 
 	// Find every [ and its matching ]
-	for i in tape.match_indices("[") {
+	for i in tape.match_indices('[') {
 		let l_start = i.0;
 		let rest: &str = &tape[l_start+1..];
 		let l_end = get_next_closing_bracket(rest);
