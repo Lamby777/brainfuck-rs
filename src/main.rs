@@ -102,15 +102,15 @@ fn getch() -> u8 {
 }
 
 fn get_next_closing_bracket(slice: &str) -> usize {
-	let chars: Vec<char> = slice.chars().collect();
+	let chars: Vec<u8> = slice.as_bytes().to_vec();
 
 	let mut ct: usize = 1;
 
 	for i in 0..chars.len() {
 		match chars[i] {
-			'['	=> { ct += 1 },
-			']'	=> { ct -= 1 },
-			_	=> ()
+			b'['	=> { ct += 1 },
+			b']'	=> { ct -= 1 },
+			_		=> ()
 		};
 
 		if ct == 0 {
